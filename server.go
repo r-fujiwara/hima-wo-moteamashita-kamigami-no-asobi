@@ -1,19 +1,19 @@
 package main
 
-import(
-	"log"
+import (
 	"fmt"
-	"time"
-	"net/http"
-	"golang.org/x/net/context"
 	"github.com/guregu/kami"
+	"golang.org/x/net/context"
+	"log"
+	"net/http"
+	"time"
 )
 
 var WorkQueue = make(chan WorkRequest, 100)
 
 func greet(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	log.Println(r)
-	
+
 	// Check to make sure the delay is anaywhere from 1 to 10 seconds.
 	delay, err := time.ParseDuration(r.FormValue("delay"))
 	if err != nil {
@@ -46,6 +46,6 @@ func main() {
 	log.Println("start dispatcher...")
 	StartDispatcher(2048)
 
-	kami.Get("/work", greet)
+	kami.Post("/work", greet)
 	kami.Serve()
 }
